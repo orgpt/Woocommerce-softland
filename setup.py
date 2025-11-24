@@ -7,7 +7,7 @@ with open("requirements.txt") as f:
 from woocommerce_fusion import __version__ as version
 
 setup(
-	name="woocommerce_fusion",
+	name="woocommerce_softland",
 	version=version,
 	description="WooCommerce connector for ERPNext v14+",
 	author="Dirk van der Laarse",

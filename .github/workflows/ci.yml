@@ -87,7 +87,7 @@ jobs:
           bash ${GITHUB_WORKSPACE}/.github/helper/install.sh
 
       - name: Start WordPress Playground and Caddy
-        working-directory: /home/runner/frappe-bench/apps/woocommerce_fusion
+        working-directory: /home/runner/frappe-bench/apps/woocommerce_softland
         run: |
           echo "--- Starting Caddy with sudo ---"
           # Use the existing, modified wp_woo_caddy file and run it with root privileges for port 443.
