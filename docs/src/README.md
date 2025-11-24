@@ -18,4 +18,4 @@ This app allows you to synchronise your ERPNext site with **multiple** WooCommer
 
 # Feedback
 
-Please raise issues for any bugs or enhancements here: [https://github.com/dvdl16/woocommerce_fusion](https://github.com/dvdl16/woocommerce_fusion)
+Please raise issues for any bugs or enhancements here: [https://github.com/dvdl16/woocommerce_softland](https://github.com/dvdl16/woocommerce_softland)

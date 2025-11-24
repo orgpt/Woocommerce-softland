@@ -4,15 +4,15 @@ include *.json
 include *.md
 include *.py
 include *.txt
-recursive-include woocommerce_fusion *.css
-recursive-include woocommerce_fusion *.csv
-recursive-include woocommerce_fusion *.html
-recursive-include woocommerce_fusion *.ico
-recursive-include woocommerce_fusion *.js
-recursive-include woocommerce_fusion *.json
-recursive-include woocommerce_fusion *.md
-recursive-include woocommerce_fusion *.png
-recursive-include woocommerce_fusion *.py
-recursive-include woocommerce_fusion *.svg
-recursive-include woocommerce_fusion *.txt
-recursive-exclude woocommerce_fusion *.pyc
+recursive-include woocommerce_softland *.css
+recursive-include woocommerce_softland *.csv
+recursive-include woocommerce_softland *.html
+recursive-include woocommerce_softland *.ico
+recursive-include woocommerce_softland *.js
+recursive-include woocommerce_softland *.json
+recursive-include woocommerce_softland *.md
+recursive-include woocommerce_softland *.png
+recursive-include woocommerce_softland *.py
+recursive-include woocommerce_softland *.svg
+recursive-include woocommerce_softland *.txt
+recursive-exclude woocommerce_softland *.pyc

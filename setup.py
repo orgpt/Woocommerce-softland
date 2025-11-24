@@ -3,8 +3,8 @@ from setuptools import setup, find_packages
 with open("requirements.txt") as f:
 	install_requires = f.read().strip().split("\n")
 
-# get version from __version__ variable in woocommerce_fusion/__init__.py
-from woocommerce_fusion import __version__ as version
+# get version from __version__ variable in woocommerce_softland/__init__.py
+from woocommerce_softland import __version__ as version
 
 setup(
 	name="woocommerce_softland",

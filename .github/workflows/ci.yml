@@ -8,7 +8,7 @@ on:
   pull_request:
 
 concurrency:
-  group: develop-woocommerce_fusion-${{ github.event.number }}
+  group: develop-woocommerce_softland-${{ github.event.number }}
   cancel-in-progress: true
 
 env:
@@ -114,7 +114,7 @@ jobs:
         working-directory: /home/runner/frappe-bench
         run: |
           bench --site test_site set-config allow_tests true
-          bench --site test_site run-tests --app woocommerce_fusion --coverage
+          bench --site test_site run-tests --app woocommerce_softland --coverage
         env:
           TYPE: server
           DEV_SERVER: 1

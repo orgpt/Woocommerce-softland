@@ -1,7 +1,7 @@
 ## WooCommerce Fusion
 
-![CI workflow](https://github.com/dvdl16/woocommerce_fusion/actions/workflows/ci.yml/badge.svg?branch=version-15)
-[![codecov](https://codecov.io/gh/dvdl16/woocommerce_fusion/graph/badge.svg?token=A5OR5QIOUX)](https://codecov.io/gh/dvdl16/woocommerce_fusion)
+![CI workflow](https://github.com/dvdl16/woocommerce_softland/actions/workflows/ci.yml/badge.svg?branch=version-15)
+[![codecov](https://codecov.io/gh/dvdl16/woocommerce_softland/graph/badge.svg?token=A5OR5QIOUX)](https://codecov.io/gh/dvdl16/woocommerce_softland)
 
 WooCommerce connector for ERPNext v15
 
@@ -23,14 +23,14 @@ User documentation is hosted at [woocommerce-fusion-docs.finfoot.tech](https://w
 
 1. [Install bench](https://github.com/frappe/bench).
 2. [Install ERPNext](https://github.com/frappe/erpnext#installation).
-3. Once ERPNext is installed, add the woocommerce_fusion app to your bench by running
+3. Once ERPNext is installed, add the woocommerce_softland app to your bench by running
 
 	```sh
-	$ bench get-app https://github.com/dvdl16/woocommerce_fusion
+	$ bench get-app https://github.com/dvdl16/woocommerce_softland
 	```
-4. After that, you can install the woocommerce_fusion app on the required site by running
+4. After that, you can install the woocommerce_softland app on the required site by running
 	```sh
-	$ bench --site sitename install-app woocommerce_fusion
+	$ bench --site sitename install-app woocommerce_softland
 	```
 
 
@@ -51,7 +51,7 @@ Furthermore, have a Frappe site available with ERPNext and WooCommerce Fusion pr
 
 1. Navigate to the app directory
 ```
-cd frappe-bench/apps/woocommerce_fusion
+cd frappe-bench/apps/woocommerce_softland
 ```
 
 2. Start Wordpress Playground
@@ -71,7 +71,7 @@ caddy run --config wp_woo_caddy --adapter caddyfile
 export WOO_INTEGRATION_TESTS_WEBSERVER="https://woo-test.localhost"
 export WOO_API_CONSUMER_KEY="ck_test_123456789"
 export WOO_API_CONSUMER_SECRET="cs_test_abcdefg"
-bench --site test_site run-tests --app woocommerce_fusion --coverage
+bench --site test_site run-tests --app woocommerce_softland --coverage
 ```
 
 ### Development
@@ -97,12 +97,12 @@ python3 -m pip install semgrep
 git clone --depth 1 https://github.com/frappe/semgrep-rules.git frappe-semgrep-rules
 
 # Run semgrep specifying rules folder as config 
-semgrep --config=/workspace/development/frappe-semgrep-rules/rules apps/woocommerce_fusion
+semgrep --config=/workspace/development/frappe-semgrep-rules/rules apps/woocommerce_softland
 ```
 
 If you use VS Code, you can specify the `.flake8` config file in your `settings.json` file:
 ```shell
-"python.linting.flake8Args": ["--config=frappe-bench-v15/apps/woocommerce_fusion/.flake8_strict"]
+"python.linting.flake8Args": ["--config=frappe-bench-v15/apps/woocommerce_softland/.flake8_strict"]
 ```
 
 
