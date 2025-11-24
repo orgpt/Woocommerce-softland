@@ -1,5 +1,5 @@
-app_name = "woocommerce_fusion"
-app_title = "WooCommerce Fusion"
+app_name = "woocommerce_softland"
+app_title = "WooCommerce softland"
 app_publisher = "Dirk van der Laarse"
 app_description = "WooCommerce connector for ERPNext v14+"
 app_email = "dirk@finfoot.work"
