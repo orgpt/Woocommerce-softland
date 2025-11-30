@@ -1,7 +1,7 @@
 ## WooCommerce Sofland
 
-![CI workflow](https://github.com/dvdl16/woocommerce_softland/actions/workflows/ci.yml/badge.svg?branch=version-15)
-[![codecov](https://codecov.io/gh/dvdl16/woocommerce_softland/graph/badge.svg?token=A5OR5QIOUX)](https://codecov.io/gh/dvdl16/woocommerce_softland)
+![CI workflow](https://github.com/orgpt/woocommerce_softland/actions/workflows/ci.yml/badge.svg?branch=version-15)
+[![codecov](https://codecov.io/gh/orgpt/woocommerce_softland/graph/badge.svg?token=A5OR5QIOUX)](https://codecov.io/gh/orgpt/woocommerce_softland)
 
 WooCommerce connector for ERPNext v15
 
@@ -26,7 +26,7 @@ User documentation is hosted at [woocommerce-Softland-docs.finfoot.tech](https:/
 3. Once ERPNext is installed, add the woocommerce_softland app to your bench by running
 
 	```sh
-	$ bench get-app https://github.com/dvdl16/woocommerce_softland
+	$ bench get-app https://github.com/orgpt/woocommerce_softland
 	```
 4. After that, you can install the woocommerce_softland app on the required site by running
 	```sh
