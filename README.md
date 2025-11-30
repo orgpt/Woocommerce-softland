@@ -1,4 +1,4 @@
-## WooCommerce Fusion
+## WooCommerce Sofland
 
 ![CI workflow](https://github.com/dvdl16/woocommerce_softland/actions/workflows/ci.yml/badge.svg?branch=version-15)
 [![codecov](https://codecov.io/gh/dvdl16/woocommerce_softland/graph/badge.svg?token=A5OR5QIOUX)](https://codecov.io/gh/dvdl16/woocommerce_softland)
@@ -9,15 +9,15 @@ This app allows you to synchronise your ERPNext site with **multiple** WooCommer
 
 ### Features
 
-- [Sales Order Synchronisation](https://woocommerce-fusion-docs.finfoot.tech/features/sales-order)
-- [Item Synchronisation](https://woocommerce-fusion-docs.finfoot.tech/features/items)
-- [Sync Item Stock Levels](https://woocommerce-fusion-docs.finfoot.tech/features/item-stock-levels)
-- [Sync Item Prices](https://woocommerce-fusion-docs.finfoot.tech/features/item-prices)
-- [Integration with WooCommerce Plugins](https://woocommerce-fusion-docs.finfoot.tech/features/woocommerce-plugins)
+- [Sales Order Synchronisation](https://woocommerce-Softland-docs.finfoot.tech/features/sales-order)
+- [Item Synchronisation](https://woocommerce-Softland-docs.finfoot.tech/features/items)
+- [Sync Item Stock Levels](https://woocommerce-Softland-docs.finfoot.tech/features/item-stock-levels)
+- [Sync Item Prices](https://woocommerce-Softland-docs.finfoot.tech/features/item-prices)
+- [Integration with WooCommerce Plugins](https://woocommerce-Softland-docs.finfoot.tech/features/woocommerce-plugins)
 
 ### User documentation
 
-User documentation is hosted at [woocommerce-fusion-docs.finfoot.tech](https://woocommerce-fusion-docs.finfoot.tech)
+User documentation is hosted at [woocommerce-Softland-docs.finfoot.tech](https://woocommerce-Softland-docs.finfoot.tech)
 
 ### Manual Installation
 
@@ -45,7 +45,7 @@ npm i @wp-playground/cli
 
 You also need to install [Caddy](https://caddyserver.com/docs/install#install), which acts as a reverse proxy. This allows us to call the Wordpress/WooCommerce API over SSL so that the same authentication method is used as production sites
 
-Furthermore, have a Frappe site available with ERPNext and WooCommerce Fusion pre-installed.
+Furthermore, have a Frappe site available with ERPNext and WooCommerce Softland pre-installed.
 
 #### Run unit and integration tests
 
