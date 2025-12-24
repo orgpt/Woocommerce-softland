@@ -142,24 +142,22 @@ doc_events = {
 
 scheduler_events = {
     "cron": {
-        # Run at 00:00, 01:00, 02:00, 03:00 (Midnight to 3 AM)
-        "0 0-3 * * *": [
-            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background"
+        "0 0 * * *": [
+            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
+            "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
         ],
-        # Run at 14:00, 15:00, 16:00 (2 PM to 4 PM)
-        "0 14-16 * * *": [
-            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background"
-        ]
+        "0 3 * * *": [
+            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
+            "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
+        ],
     },
     "hourly_long": [
         "woocommerce_softland.tasks.sync_sales_orders.sync_woocommerce_orders_modified_since",
         "woocommerce_softland.tasks.sync_items.sync_woocommerce_products_modified_since",
     ],
-    "daily_long": [
-        # Removed stock update from here as it is now in cron above
-        "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
-    ],
 }
+
+
 
 # Testing
 # -------
