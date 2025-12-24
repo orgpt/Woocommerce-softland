@@ -47,6 +47,24 @@ def update_stock_levels_for_woocommerce_item(doc, method):
         # 5. Collect Unique Item Codes
         unique_item_codes = list(set([row.item_code for row in doc.items]))
         
+@frappe.whitelist()
+def enqueue_manual_item_stock_sync(item_code):
+	if frappe.cache().get_value(f"woo_stock_manual_{item_code}"):
+		return
+
+	frappe.cache().set_value(
+		f"woo_stock_manual_{item_code}",
+		1,
+		expires_in_sec=1800  # 30 minutes
+	)
+
+	frappe.enqueue(
+		"woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+		queue="long",
+		timeout=600,
+		item_code=[item_code],
+	)
+
 
 def update_stock_levels_for_all_enabled_items_in_background():
     """

@@ -134,3 +134,21 @@ class SynchroniseItemPrice(SynchroniseWooCommerce):
 				frappe.log_error("WooCommerce Error: Price List Sync", error_message)
 
 			sleep(self.wc_server.price_list_delay_per_item)
+
+@frappe.whitelist()
+def enqueue_manual_item_price_sync(item_code):
+	if frappe.cache().get_value(f"woo_price_manual_{item_code}"):
+		return
+
+	frappe.cache().set_value(
+		f"woo_price_manual_{item_code}",
+		1,
+		expires_in_sec=1800
+	)
+
+	frappe.enqueue(
+		"woocommerce_softland.tasks.sync_item_prices.run_item_price_sync",
+		queue="long",
+		timeout=900,
+		item_code=item_code,
+	)
