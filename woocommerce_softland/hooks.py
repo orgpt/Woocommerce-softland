@@ -108,6 +108,34 @@ override_doctype_class = {
 # 	}
 # }
 
+doc_events = {
+	"Stock Entry": {
+		"on_submit": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+		"on_cancel": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+	},
+	"Stock Reconciliation": {
+		"on_submit": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+		"on_cancel": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+	},
+	"Sales Invoice": {
+		"on_submit": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+		"on_cancel": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+	},
+	"Delivery Note": {
+		"on_submit": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+		"on_cancel": "woocommerce_softland.tasks.stock_update.update_stock_levels_for_woocommerce_item",
+	},
+	"Item Price": {
+		"on_update": "woocommerce_softland.tasks.sync_item_prices.update_item_price_for_woocommerce_item_from_hook"
+	},
+	"Sales Order": {
+		"on_submit": "woocommerce_softland.tasks.sync_sales_orders.run_sales_order_sync_from_hook"
+	},
+	"Item": {
+		"on_update": "woocommerce_softland.tasks.sync_items.run_item_sync_from_hook",
+		"after_insert": "woocommerce_softland.tasks.sync_items.run_item_sync_from_hook",
+	},
+}
 
 # Scheduled Tasks
 # ---------------
