@@ -17,30 +17,31 @@ frappe.ui.form.on('Item', {
 	},
 
 	sync_item_stock: function(frm) {
-		// Sync this Item
-		frappe.dom.freeze(__("Sync Item Stock with WooCommerce..."));
-		frappe.call({
-			method: "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
-			args: {
-				item_code: frm.doc.name
-			},
-			callback: function(r) {
-				frappe.dom.unfreeze();
-				frappe.show_alert({
-					message:__('Synchronised stock level to WooCommerce for enabled servers'),
-					indicator:'green'
-				}, 5);
-				frm.reload_doc();
-			},
-			error: (r) => {
-				frappe.dom.unfreeze();
-				frappe.show_alert({
-					message: __('There was an error processing the request. See Error Log.'),
-					indicator: 'red'
-				}, 5);
-			}
-		});
-	},
+        // Sync this Item
+        frappe.dom.freeze(__("Sync Item Stock with WooCommerce..."));
+        frappe.call({
+            method: "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+            args: {
+                item_code: frm.doc.name,
+                force_sync: true 
+            },
+            callback: function(r) {
+                frappe.dom.unfreeze();
+                frappe.show_alert({
+                    message:__('Synchronised stock level to WooCommerce for enabled servers'),
+                    indicator:'green'
+                }, 5);
+                frm.reload_doc();
+            },
+            error: (r) => {
+                frappe.dom.unfreeze();
+                frappe.show_alert({
+                    message: __('There was an error processing the request. See Error Log.'),
+                    indicator: 'red'
+                }, 5);
+            }
+        });
+    },
 
 	sync_item_price: function(frm) {
 		// Sync this Item's Price

@@ -79,17 +79,22 @@ def update_stock_levels_for_all_enabled_items_in_background():
 
 
 @frappe.whitelist()
-def update_stock_levels_on_woocommerce_site(item_code):
+def update_stock_levels_on_woocommerce_site(item_code, force_sync=False):
     """
-    Updates stock levels of an item on all its associated WooCommerce sites.
-    Includes caching to prevent unnecessary API calls.
+    Updates stock levels.
+    Args:
+        item_code (str): The item to sync.
+        force_sync (bool): If True, ignores the cache and forces an API push.
     """
+    # Ensure boolean type if passed from JS as 0/1 or string
+    if isinstance(force_sync, str):
+        force_sync = frappe.parse_json(force_sync)
+    
     item = frappe.get_doc("Item", item_code)
 
     if len(item.woocommerce_servers) == 0 or not item.is_stock_item or item.disabled:
         return False
     else:
-        # Get actual stock levels
         bins = frappe.get_list(
             "Bin", {"item_code": item_code}, ["name", "warehouse", "reserved_qty", "actual_qty"]
         )
@@ -108,7 +113,7 @@ def update_stock_levels_on_woocommerce_site(item_code):
                 ):
                     continue
 
-                # Calculate the exact stock quantity to be sent
+                # Calculate stock
                 current_stock_qty = math.floor(
                     sum(
                         bin.actual_qty
@@ -119,18 +124,16 @@ def update_stock_levels_on_woocommerce_site(item_code):
                     )
                 )
 
-                # --- OPTIMIZATION 2: Check Cache Before API Call ---
-                # Create a unique key for this Item + WC Site combination
+                # --- CACHE LOGIC START ---
                 cache_key = f"wc_stock_sync:{woocommerce_id}:{item_code}"
-                last_synced_qty = frappe.cache().get_value(cache_key)
+                
+                # Only check cache if we are NOT forcing the sync
+                if not force_sync:
+                    last_synced_qty = frappe.cache().get_value(cache_key)
+                    if last_synced_qty is not None and float(last_synced_qty) == float(current_stock_qty):
+                        continue
+                # --- CACHE LOGIC END ---
 
-                # If the value in cache matches current calculation, skip the API call entirely
-                if last_synced_qty is not None and float(last_synced_qty) == float(current_stock_qty):
-                    # Optional: Log strictly for debugging, otherwise leave silent to reduce noise
-                    # frappe.log_error("Skipped Sync", f"Item {item_code} stock {current_stock_qty} matches cache.")
-                    continue
-
-                # Setup the API
                 wc_api = APIWithRequestLogging(
                     url=wc_server.woocommerce_server_url,
                     consumer_key=wc_server.api_consumer_key,
@@ -149,7 +152,6 @@ def update_stock_levels_on_woocommerce_site(item_code):
                     if parent_item_id:
                         parent_item = frappe.get_doc("Item", parent_item_id)
                         parent_woocommerce_id = None
-                        # Get the parent item's woocommerce_id
                         for parent_wc_site in parent_item.woocommerce_servers:
                             if parent_wc_site.woocommerce_server == woocommerce_server:
                                 parent_woocommerce_id = parent_wc_site.woocommerce_id
@@ -162,9 +164,8 @@ def update_stock_levels_on_woocommerce_site(item_code):
                     
                     response = wc_api.put(endpoint=endpoint, data=data_to_post)
 
-                    # --- OPTIMIZATION 3: Update Cache on Success ---
+                    # Update cache on success
                     if response.status_code == 200:
-                        # Store the successful sync value in cache (no expiration needed, or set long expiry)
                         frappe.cache().set_value(cache_key, current_stock_qty)
 
                 except Exception as err:
