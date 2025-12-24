@@ -146,10 +146,6 @@ scheduler_events = {
             "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
             "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
         ],
-        "0 3 * * *": [
-            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
-            "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
-        ],
     },
     "hourly_long": [
         "woocommerce_softland.tasks.sync_sales_orders.sync_woocommerce_orders_modified_since",
