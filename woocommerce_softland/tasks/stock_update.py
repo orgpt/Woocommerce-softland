@@ -78,18 +78,97 @@ def update_stock_levels_for_all_enabled_items_in_background():
         )
 
 
+import math
+import frappe
+from woocommerce_softland.tasks.utils import APIWithRequestLogging
+
+verify_ssl = not frappe._dev_server
+
+def update_stock_levels_for_woocommerce_item(doc, method):
+    """
+    Trigger function: Runs on Save/Submit of Stock Entry, Sales Invoice, etc.
+    """
+    if frappe.flags.in_test:
+        return
+
+    if doc.doctype in ("Stock Entry", "Stock Reconciliation", "Sales Invoice", "Delivery Note"):
+        if doc.doctype == "Sales Invoice" and doc.update_stock == 0:
+            return
+
+        # --- OPTIMIZATION: Warehouse Filtering & Deduplication ---
+        
+        # 1. Get enabled WooCommerce servers
+        enabled_servers = frappe.get_list(
+            "WooCommerce Server", 
+            filters={"enable_sync": 1, "enable_stock_level_synchronisation": 1}
+        )
+        if not enabled_servers:
+            return
+
+        # 2. Identify synced warehouses from these servers
+        synced_warehouses = set()
+        for server in enabled_servers:
+            server_doc = frappe.get_cached_doc("WooCommerce Server", server.name)
+            for wh_row in server_doc.warehouses:
+                synced_warehouses.add(wh_row.warehouse)
+
+        # 3. Identify warehouses touched by this specific document
+        doc_warehouses = set()
+        for row in doc.items:
+            if row.get("warehouse"): doc_warehouses.add(row.warehouse)
+            if row.get("s_warehouse"): doc_warehouses.add(row.s_warehouse) # Source
+            if row.get("t_warehouse"): doc_warehouses.add(row.t_warehouse) # Target
+
+        # 4. If no synced warehouses are involved, do nothing
+        if not doc_warehouses.intersection(synced_warehouses):
+            return
+
+        # 5. Queue jobs for unique items only (prevents duplicate jobs for same item)
+        unique_item_codes = set([row.item_code for row in doc.items])
+        
+        for item_code in unique_item_codes:
+            frappe.enqueue(
+                "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+                enqueue_after_commit=True,
+                item_code=item_code,
+            )
+
+
+def update_stock_levels_for_all_enabled_items_in_background():
+    """
+    Get all enabled ERPNext Items and post stock updates to WooCommerce.
+    This function is designed to be called by the Scheduler (Cron).
+    """
+    erpnext_items = []
+    current_page_length = 500
+    start = 0
+
+    # Get all items, 500 records at a time
+    while current_page_length == 500:
+        items = frappe.db.get_all(
+            "Item",
+            filters={"disabled": 0, "is_stock_item": 1}, # Added is_stock_item filter for efficiency
+            fields=["name"],
+            start=start,
+            page_length=500,
+        )
+        erpnext_items.extend(items)
+        current_page_length = len(items)
+        start += current_page_length
+
+    for item in erpnext_items:
+        frappe.enqueue(
+            "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+            item_code=item.name,
+        )
+
+
 @frappe.whitelist()
-def update_stock_levels_on_woocommerce_site(item_code, force_sync=False):
+def update_stock_levels_on_woocommerce_site(item_code):
     """
-    Updates stock levels.
-    Args:
-        item_code (str): The item to sync.
-        force_sync (bool): If True, ignores the cache and forces an API push.
+    Updates stock levels of an item on all its associated WooCommerce sites.
+    No Caching involved - direct API push.
     """
-    # Ensure boolean type if passed from JS as 0/1 or string
-    if isinstance(force_sync, str):
-        force_sync = frappe.parse_json(force_sync)
-    
     item = frappe.get_doc("Item", item_code)
 
     if len(item.woocommerce_servers) == 0 or not item.is_stock_item or item.disabled:
@@ -124,16 +203,6 @@ def update_stock_levels_on_woocommerce_site(item_code, force_sync=False):
                     )
                 )
 
-                # --- CACHE LOGIC START ---
-                cache_key = f"wc_stock_sync:{woocommerce_id}:{item_code}"
-                
-                # Only check cache if we are NOT forcing the sync
-                if not force_sync:
-                    last_synced_qty = frappe.cache().get_value(cache_key)
-                    if last_synced_qty is not None and float(last_synced_qty) == float(current_stock_qty):
-                        continue
-                # --- CACHE LOGIC END ---
-
                 wc_api = APIWithRequestLogging(
                     url=wc_server.woocommerce_server_url,
                     consumer_key=wc_server.api_consumer_key,
@@ -163,10 +232,6 @@ def update_stock_levels_on_woocommerce_site(item_code, force_sync=False):
                         endpoint = f"products/{woocommerce_id}"
                     
                     response = wc_api.put(endpoint=endpoint, data=data_to_post)
-
-                    # Update cache on success
-                    if response.status_code == 200:
-                        frappe.cache().set_value(cache_key, current_stock_qty)
 
                 except Exception as err:
                     error_message = f"{frappe.get_traceback()}\n\nData in PUT request: \n{str(data_to_post)}"
