@@ -199,3 +199,29 @@ def sync_single_item(item_code, force_sync):
             if response.status_code != 200:
                 error_message = f"Status Code not 200\nItem: {item_code}\nEndpoint: {endpoint}\nResponse: {response.text}"
                 frappe.log_error("WooCommerce Sync Error", error_message)
+
+				# ... (your existing code) ...
+
+from frappe.utils.background_jobs import get_redis_conn
+
+@frappe.whitelist()
+def clear_queue_now():
+    """
+    Emergency function to clear all queues.
+    Call via: /api/method/woocommerce_softland.tasks.stock_update.clear_queue_now
+    """
+    if not frappe.session.user == "Administrator":
+        return "Not permitted"
+
+    redis_connection = get_redis_conn()
+    queues = ["queue:default", "queue:short", "queue:long", "queue:low"]
+    
+    cleared_count = 0
+    for q in queues:
+        count = redis_connection.llen(q)
+        if count > 0:
+            redis_connection.delete(q)
+            cleared_count += count
+    
+    frappe.msgprint(f"Cleared {cleared_count} jobs from queues!")
+    return f"Cleared {cleared_count} jobs."
