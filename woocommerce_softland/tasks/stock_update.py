@@ -47,15 +47,6 @@ def update_stock_levels_for_woocommerce_item(doc, method):
         # 5. Collect Unique Item Codes
         unique_item_codes = list(set([row.item_code for row in doc.items]))
         
-        if unique_item_codes:
-            # --- OPTIMIZATION: Enqueue ONE job with a LIST of items ---
-            frappe.enqueue(
-                "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
-                enqueue_after_commit=True,
-                item_code=unique_item_codes, 
-                timeout=1800 # 30 minute timeout for large documents
-            )
-
 
 def update_stock_levels_for_all_enabled_items_in_background():
     """
