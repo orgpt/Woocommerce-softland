@@ -18,12 +18,7 @@ from woocommerce_softland.woocommerce.woocommerce_api import (
 def update_item_price_for_woocommerce_item_from_hook(doc, method):
 	if not frappe.flags.in_test:
 		if doc.doctype == "Item Price":
-			frappe.enqueue(
-				"woocommerce_softland.tasks.sync_item_prices.run_item_price_sync",
-				enqueue_after_commit=True,
-				item_code=doc.item_code,
-				item_price_doc=doc,
-			)
+        run_item_price_sync()
 
 
 @frappe.whitelist()
