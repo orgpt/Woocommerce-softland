@@ -2,7 +2,7 @@ import math
 
 import frappe
 
-from woocommerce_fusion.tasks.utils import APIWithRequestLogging
+from woocommerce_softland.tasks.utils import APIWithRequestLogging
 
 verify_ssl = not frappe._dev_server
 
@@ -25,7 +25,7 @@ def update_stock_levels_for_woocommerce_item(doc, method):
 				item_codes = [row.item_code for row in doc.items]
 				for item_code in item_codes:
 					frappe.enqueue(
-						"woocommerce_fusion.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+						"woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
 						enqueue_after_commit=True,
 						item_code=item_code,
 					)
@@ -54,7 +54,7 @@ def update_stock_levels_for_all_enabled_items_in_background():
 
 	for item in erpnext_items:
 		frappe.enqueue(
-			"woocommerce_fusion.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+			"woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
 			item_code=item.name,
 		)
 

@@ -10,15 +10,15 @@ from frappe.query_builder import Criterion
 from frappe.utils import get_datetime, now
 from jsonpath_ng.ext import parse
 
-from woocommerce_fusion.exceptions import SyncDisabledError
-from woocommerce_fusion.tasks.sync import SynchroniseWooCommerce
-from woocommerce_fusion.woocommerce.doctype.woocommerce_product.woocommerce_product import (
+from woocommerce_softland.exceptions import SyncDisabledError
+from woocommerce_softland.tasks.sync import SynchroniseWooCommerce
+from woocommerce_softland.woocommerce.doctype.woocommerce_product.woocommerce_product import (
 	WooCommerceProduct,
 )
-from woocommerce_fusion.woocommerce.doctype.woocommerce_server.woocommerce_server import (
+from woocommerce_softland.woocommerce.doctype.woocommerce_server.woocommerce_server import (
 	WooCommerceServer,
 )
-from woocommerce_fusion.woocommerce.woocommerce_api import (
+from woocommerce_softland.woocommerce.woocommerce_api import (
 	generate_woocommerce_record_name_from_domain_and_id,
 )
 
