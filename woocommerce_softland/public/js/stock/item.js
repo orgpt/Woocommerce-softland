@@ -20,7 +20,7 @@ frappe.ui.form.on('Item', {
 		// Sync this Item
 		frappe.dom.freeze(__("Sync Item Stock with WooCommerce..."));
 		frappe.call({
-			method: "woocommerce_fusion.tasks.stock_update.update_stock_levels_on_woocommerce_site",
+			method: "woocommerce_softland.tasks.stock_update.update_stock_levels_on_woocommerce_site",
 			args: {
 				item_code: frm.doc.name
 			},
@@ -46,7 +46,7 @@ frappe.ui.form.on('Item', {
 		// Sync this Item's Price
 		frappe.dom.freeze(__("Sync Item Price with WooCommerce..."));
 		frappe.call({
-			method: "woocommerce_fusion.tasks.sync_item_prices.run_item_price_sync",
+			method: "woocommerce_softland.tasks.sync_item_prices.run_item_price_sync",
 			args: {
 				item_code: frm.doc.name
 			},
@@ -72,7 +72,7 @@ frappe.ui.form.on('Item', {
 		// Sync this Item
 		frappe.dom.freeze(__("Sync Item with WooCommerce..."));
 		frappe.call({
-			method: "woocommerce_fusion.tasks.sync_items.run_item_sync",
+			method: "woocommerce_softland.tasks.sync_items.run_item_sync",
 			args: {
 				item_code: frm.doc.name
 			},
