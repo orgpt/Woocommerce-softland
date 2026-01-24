@@ -141,19 +141,24 @@ doc_events = {
 # ---------------
 
 scheduler_events = {
-    "cron": {
-        "0 0 * * *": [
-            "woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
-        ],
-    },
-    "hourly_long": [
-        "woocommerce_softland.tasks.sync_sales_orders.sync_woocommerce_orders_modified_since",
-        "woocommerce_softland.tasks.sync_items.sync_woocommerce_products_modified_since",
+	# 	"all": [
+	# 		"woocommerce_fusion.tasks.all"
+	# 	],
+	# 	"weekly": [
+	# 		"woocommerce_fusion.tasks.daily"
+	# 	],
+	"hourly_long": [
+		"woocommerce_softland.tasks.sync_sales_orders.sync_woocommerce_orders_modified_since",
+		"woocommerce_softland.tasks.sync_items.sync_woocommerce_products_modified_since",
+	],
+	"daily_long": [
+		"woocommerce_softland.tasks.stock_update.update_stock_levels_for_all_enabled_items_in_background",
 		"woocommerce_softland.tasks.sync_item_prices.run_item_price_sync_in_background",
-    ],
+	],
+	# 	"monthly": [
+	# 		"woocommerce_fusion.tasks.monthly"
+	# 	],
 }
-
-
 
 # Testing
 # -------
